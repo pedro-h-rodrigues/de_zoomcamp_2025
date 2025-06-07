@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: postgres
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: kestra
+      POSTGRES_PASSWORD: k3str4
+      POSTGRES_DB: postgres-zoomcamp
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+volumes:
+  postgres-data:
+
+# https://rest-apis-flask.teclado.com/docs/flask_smorest/reload_api_docker_container/
+
+docker run -it \
+  - e POSTGRES_USER = "root" \
+  - e POSTGRES_PASSWORD: "root" \
+  - e POSTGRES_DB: "ny_taxi" \
+  - v c:/Users/pedro/Programming/de_zoomcamp/1_docker_terraform/2_docker_sql/ny_taxy_postgres_data:/var/lib/postgresql/data \
+  - p 5432:5432 
+ postgres:13
+
+c:/Users/pedro/Programming/de_zoomcamp/1_docker_terraform/2_docker_sql/ny_taxy_postgres_data
+
+C:\Users\pedro\Programming\de_zoomcamp\ny_taxy_postgres_data
+
+1_docker_terraform/2_docker_sql/ny_taxy_postgres_data
