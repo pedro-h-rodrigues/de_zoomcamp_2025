@@ -130,7 +130,7 @@ Conectando-se à database usando a lib `pgcli` (instalada com pip install pgcli)
 `pgcli --help` para ver os parâmetros necessários para conectar-se à uma database
 
 ```
-pgcli -h localhost -p 5432 -u root -d ny_taxy
+pgcli -h localhost -p 5432 -u root -d ny_taxi
 
 pgcli -h <host> -p <port> -u <username> -d <database>
 
@@ -272,4 +272,63 @@ Sair do container e voltar para o terminal
 Parando o container
 `docker stop cff` (primeiras letras do CONTAINER ID)
 
+### 2.5 Integrando o banco com o pgAdmin
+
+`pgAdmin` é uma ferramenta com um GUI que permite interagir com uma base Postegres de forma mais intuitiva do que usando o `pgcli` ou `psql` na CLI. (Link do site do pgAdmin)[https://www.pgadmin.org/]
+
+Vamos baixar a imagem do pgAdmin no docker e usar um container para rodá-lo.
+
+
+**comando para rodar o pgAdmin no docker**
+
+Port mapping: Mapeia a porta 8080 da host machine com porta 80 do container.
+O pgAdmin vai escutar a porta 80 e todas requisições que fizermos para a porta 8080 vão para a porta 80 do container.
+
+Esse é o comando para rodar o container do pgAdmin
+
+```
+docker run -it \
+  -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" \
+  -e PGADMIN_DEFAULT_PASSWORD="root" \
+  -p 8080:80 \
+  dpage/pgadmin4
+```
+
+Porém, é preciso fazer com que esse container se conecte com o container contendo a database postgres. É possível fazer essa conexão de duas formas, usando `network` ou `docker compose`.
+
+Para acessar o pgAdmin basta acessar a porta 8080: `http://localhost:8080/`
+
+#### 2.5.1 Integrando o pgAdmin com o banco usando network
+
+https://docs.docker.com/reference/cli/docker/network/create/
+
+`docker network create pg-network`
+
+Agora o container do postgres deve ser alterado para informarmos que ele deve rodar nesta rede:
+
+Precisamos de incluir duas informações:
+- o nome da network a ser usada (a `pg-network` criada anteriormente)
+- um nome para esse container (no caso defini `pg-database`, para passar no outro container do pgAdmin que vai se conectar com esse)
+
+```
+docker run -d \
+  -e POSTGRES_USER="root" \
+  -e POSTGRES_PASSWORD="root" \
+  -e POSTGRES_DB="ny_taxi" \
+  -v dtc_postgres_volume_local:/var/lib/postgresql/data \
+  -p 5432:5432 \
+  --network=pg-network \
+  --name pg-database \
+  postgres:13
+```
+
+```
+docker run -it \
+  -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" \
+  -e PGADMIN_DEFAULT_PASSWORD="root" \
+  -p 8080:80 \
+  --network=pg-network \
+  --name pgadmin \
+  dpage/pgadmin4
+```
 
