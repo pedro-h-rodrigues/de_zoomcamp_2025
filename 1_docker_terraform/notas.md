@@ -331,4 +331,6 @@ docker run -it \
   --name pgadmin \
   dpage/pgadmin4
 ```
+Comando para saber as networks existentes: `docker network ls`
 
+Uma vez criado os containers, para rodá-los de novo, bastaria rodar `docker start pg-database` e `docker start pgadmin`
