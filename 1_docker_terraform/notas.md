@@ -334,3 +334,28 @@ docker run -it \
 Comando para saber as networks existentes: `docker network ls`
 
 Uma vez criado os containers, para rodá-los de novo, bastaria rodar `docker start pg-database` e `docker start pgadmin`
+
+### 2.6 Fazendo a ingestão via Docker 
+
+Vamos fazer a ingestão com um script python rodando em um container, ao invés de usar um notebook como feito no item 4.
+
+Comando na CLI para converter um notebook em um script python `jupyter nbconvert --to=script ingest_data.ipynb`
+
+Vamos usar uma lib default do python chamada [argparse](https://docs.python.org/3/library/argparse.html) para passar os parâmetros pra o script python.
+
+Para rodar o script com os parâmetros direto na CLI, seria assim:
+
+```
+python ingest_data.py \
+    --user=root \
+    --password=root \
+    --host=localhost \
+    --port=5432 \
+    --db=ny_taxi \
+    --table_name=yellow_taxi_data \
+    --url=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz
+```
+
+Ver o script `ingest_data.py`
+
+O próximo passo é colocar o script em um container.

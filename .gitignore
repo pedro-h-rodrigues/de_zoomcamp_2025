@@ -1,5 +1,6 @@
 #large files
 1_docker_terraform/yellow_tripdata_2021-01.csv
+1_docker_terraform/output.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
