@@ -337,6 +337,8 @@ Uma vez criado os containers, para rodá-los de novo, bastaria rodar `docker sta
 
 ### 2.6 Fazendo a ingestão via Docker 
 
+### 2.6.1 Criando o script python de ingestão 
+
 Vamos fazer a ingestão com um script python rodando em um container, ao invés de usar um notebook como feito no item 4.
 
 Comando na CLI para converter um notebook em um script python `jupyter nbconvert --to=script ingest_data.ipynb`
@@ -358,4 +360,39 @@ python ingest_data.py \
 
 Ver o script `ingest_data.py`
 
-O próximo passo é colocar o script em um container.
+### 2.6.2 Dockerizando o script python de ingestão 
+
+Para isso será necessário alterar o Dockerfile para:
+
+```
+FROM python:3.12
+
+RUN pip install pandas sqlalchemy psycopg2 requests
+
+#Local no container onde o arquivo será copiado
+WORKDIR /app
+COPY ingest_data.py ingest_data.py
+
+ENTRYPOINT [ "python", "ingest_data.py"]
+```
+
+E o comando para criar o container `docker build -t taxi_ingest:v01 .`
+
+E o comando para rodar o container:
+- network=pg-network: informando a rede usada para relacionar os containers (é um parâmetro do container)
+- host=pg-database: informa o host para o script se conectar (um parâmetro do script)
+
+"This puts both containers (pg-database and taxi_ingest) on the same Docker bridge network. When containers are on the same network, they can talk to each other via container name."
+
+```
+docker run -it \
+  --network=pg-network \
+  taxi_ingest:v01 \
+    --user=root \
+    --password=root \
+    --host=pg-database \
+    --port=5432 \
+    --db=ny_taxi \
+    --table_name=yellow_taxi_data \
+    --url=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz
+```
