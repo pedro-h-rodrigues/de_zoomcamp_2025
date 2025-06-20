@@ -1,9 +1,8 @@
 FROM python:3.12
 
-RUN pip install pandas
-
+RUN pip install pandas sqlalchemy psycopg2 requests
 #Local no container onde o arquivo será copiado
 WORKDIR /app
-COPY pipeline.py pipeline.py
+COPY ingest_data.py ingest_data.py
 
-ENTRYPOINT [ "python", "pipeline.py"]
+ENTRYPOINT [ "python", "ingest_data.py"]
