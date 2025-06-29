@@ -396,3 +396,27 @@ docker run -it \
     --table_name=yellow_taxi_data \
     --url=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz
 ```
+
+## 2.7 Integrando os containers com Docker Compose
+
+É mais prático utilizar o docker-compose do que rodar 2 containers seperados e criar uma rede entre eles. Link desta etapa do projeto: https://www.youtube.com/watch?v=hKI6PkPhpa0&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=9
+
+Comando para verificar que você possui o docker compose instalado `docker-compose`
+
+Documentação do docker compose: https://docs.docker.com/compose/intro/compose-application-model/
+
+Os mesmos parâmetros que foram passados para criar os containers "separados" são passados no yaml compose.yaml.
+- Variáveis de ambiente (usuário, senha)
+- Volume
+- Portas
+
+No volume, foi necessário especificar o parâmetro "external" para o docker-compose usar o volume que já havia sido criado anteriormente, ao invés de tentar criar um novo.
+
+Cada container é um serviço no docker-compose, e pelo fato de já estarem no mesmo arquivo compose, eles já estão na mesma rede e não é necessário criar uma network.
+
+Comando para rodar o arquivo compose em detached mode `docker compose up -d`.
+
+Comando para ver os serviços rodando `docker-compose stats`
+
+Comando para parar os serviços `docker-compose down`
+
