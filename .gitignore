@@ -1,6 +1,8 @@
 #large files
 1_docker_terraform/yellow_tripdata_2021-01.csv
 1_docker_terraform/output.csv
+1_docker_terraform/taxi_zone_lookup.csv
+1_docker_terraform/green_tripdata_2019-10.csv.gz
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
