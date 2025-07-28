@@ -1,4 +1,5 @@
 services:
+# Na interface do pgadmin o hostname é o nome do serviço no caso pgdatabase  
   pgdatabase:
     image: postgres:13
     environment:
