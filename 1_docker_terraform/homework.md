@@ -14,3 +14,6 @@ port = 5432
 
 my answer: 104,802; 198,924; 109,603; 27,678; 35,189
 
+# Question 4. Longest trip for each day
+
+my answer: 2019-10-31
